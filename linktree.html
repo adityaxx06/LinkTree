@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Links — Glass Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --accent: #fffb00;
+            --danger: #ff3b30;
+            --success: #34c759;
+            --warning: #7a7a7a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(196, 161, 36, 0.641) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255, 140, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(80, 80, 80, 0.4) 0%, transparent 60%),
+                linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 30%, #1c1c1c 60%, #0d0d0d 100%);
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background shapes */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+
+        .shape-1 { 
+            width: 400px; height: 400px; 
+            background: radial-gradient(circle, #006eff 0%, #fbff00 100%);
+            top: -100px; left: -100px; 
+            animation: float-1 12s infinite ease-in-out; 
+        }
+        .shape-2 { 
+            width: 350px; height: 350px; 
+            background: radial-gradient(circle, #ff6b35 0%, #e5ff00 100%);
+            top: 40%; right: -150px; 
+            animation: float-2 15s infinite ease-in-out; 
+        }
+        .shape-3 { 
+            width: 300px; height: 300px; 
+            background: radial-gradient(circle, #666666 0%, #444444 100%);
+            bottom: -80px; left: 20%; 
+            animation: float-3 18s infinite ease-in-out; 
+        }
+        .shape-4 { 
+            width: 250px; height: 250px; 
+            background: radial-gradient(circle, #ffaa00 0%, #ffee00 100%);
+            top: 10%; left: 60%; 
+            animation: float-4 20s infinite ease-in-out; 
+        }
+        .shape-5 { 
+            width: 200px; height: 200px; 
+            background: radial-gradient(circle, #888888 0%, #555555 100%);
+            bottom: 20%; right: 20%; 
+            animation: float-5 16s infinite ease-in-out; 
+        }
+
+        @keyframes float-1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -30px) scale(1.1); }
+            50% { transform: translate(-30px, 50px) scale(0.9); }
+            75% { transform: translate(20px, -20px) scale(1.05); }
+        }
+        @keyframes float-2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-40px, 30px) scale(1.15); }
+            66% { transform: translate(30px, -40px) scale(0.85); }
+        }
+        @keyframes float-3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, -60px) scale(1.1); }
+        }
+        @keyframes float-4 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-50px, 40px) scale(1.2); }
+        }
+        @keyframes float-5 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(0.9); }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 200, 0, 0.3);
+            border-radius: 50%;
+            animation: particle-float linear infinite;
+        }
+
+        @keyframes particle-float {
+            0% { transform: translate(0, 100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(var(--tx), -10vh); opacity: 0; }
+        }
+
+        /* Layout */
+        .app-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Public Card */
+        .public-container {
+            width: 100%;
+            max-width: 480px;
+            flex-shrink: 0;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(255,255,255,0.05) inset,
+                0 20px 60px rgba(0,0,0,0.4);
+            text-align: center;
+            transition: box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .glass-shine {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255,200,0,0.08) 0%, transparent 40%, rgba(255,140,0,0.05) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Profile */
+        .profile { 
+            margin-bottom: 30px; 
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+        }
+        .avatar-wrapper:hover { transform: scale(1.05); }
+
+        .avatar {
+            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 0 4px rgba(255,200,0,0.1);
+        }
+
+        .avatar-ring {
+            position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border-radius: 50%; border: 2px solid rgba(255,200,0,0.2);
+            border-top-color: rgba(255, 255, 255, 0.9); border-right-color: rgba(206, 200, 178, 0.6);
+            animation: spin 6s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .name { 
+            color: #fff; font-size: 28px; font-weight: 700; margin-bottom: 8px; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            position: relative; z-index: 1;
+        }
+
+        .bio { 
+            color: rgba(255,255,255,0.85); font-size: 15px; line-height: 1.5; margin-bottom: 20px; 
+            position: relative; z-index: 1;
+        }
+
+        /* Socials */
+        .social-icons {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;
+            position: relative; z-index: 1;
+        }
+
+        .social-icon {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: rgba(0, 0, 0, 0.12); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            display: flex; align-items: center; justify-content: center;
+            color: #ffffff; font-size: 18px; text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .social-icon::before {
+            content: ''; position: absolute; inset: 0; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent);
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+
+        .social-icon:hover { 
+            transform: translateY(-5px) scale(1.15); 
+            background: rgba(0, 0, 0, 0.25); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3), 0 0 20px rgba(255,200,0,0.2); 
+        }
+
+        .social-icon:hover::before { opacity: 1; }
+        .social-icon:active { transform: scale(0.95); }
+
+        /* Links */
+        .links { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 14px; 
+            position: relative;
+            z-index: 2;
+        }
+
+        .link-item {
+            display: flex; 
+            align-items: center; 
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.06); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 200, 0, 0.15); 
+            border-radius: 16px;
+            text-decoration: none; 
+            color: #fff;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative; 
+            overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .link-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 200, 0, 0.08), transparent);
+            transition: left 0.6s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .link-item:hover .link-shimmer {
+            left: 100%;
+        }
+
+        .link-item:hover {
+            transform: translateX(10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.12); 
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.25), 
+                0 0 30px rgba(255, 200, 0, 0.1),
+                0 0 0 1px rgba(255, 200, 0, 0.1) inset;
+        }
+
+        .link-item:active { 
+            transform: scale(0.98) translateX(5px); 
+        }
+
+        .link-icon {
+            width: 42px; 
+            height: 42px; 
+            border-radius: 12px; 
+            background: rgba(0, 0, 0, 0.12);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            margin-right: 15px; 
+            font-size: 18px; 
+            flex-shrink: 0;
+            transition: all 0.35s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 1;
+            color: #ffffff;
+        }
+
+        .link-item:hover .link-icon { 
+            transform: scale(1.1); 
+            background: rgba(0, 0, 0, 0.25); 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-text { 
+            flex: 1; 
+            text-align: left; 
+            position: relative;
+            z-index: 1;
+        }
+
+        .link-title { 
+            font-size: 16px; 
+            font-weight: 600; 
+            margin-bottom: 2px; 
+            color: #fff;
+        }
+
+        .link-desc { 
+            font-size: 12px; 
+            opacity: 0.7; 
+            color: rgba(255,255,255,0.8);
+        }
+
+        .link-arrow { 
+            opacity: 0;
+            transform: translateX(-10px); 
+            transition: all 0.35s ease; 
+            font-size: 14px; 
+            color: #ffffff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .link-item:hover .link-arrow { 
+            opacity: 1; 
+            transform: translateX(0); 
+        }
+
+        .share-btn {
+            margin-top: 25px; padding: 12px 30px; 
+            background: rgba(255,200,0,0.15);
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,200,0,0.3);
+            border-radius: 30px; color: #ffffff; font-size: 14px; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .share-btn:hover { 
+            background: rgba(255,200,0,0.3); 
+            transform: translateY(-3px); 
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 20px rgba(255,200,0,0.15); 
+        }
+
+        .share-btn:active { transform: scale(0.95); }
+
+        .footer { 
+            margin-top: 20px; 
+            color: rgba(255,255,255,0.5); 
+            font-size: 12px; 
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Admin Toggle Button */
+        .admin-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,200,0,0.3);
+            color: #bc990b66;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .admin-toggle:hover { 
+            background: rgba(0,0,0,0.7); 
+            transform: scale(1.1); 
+            border-color: rgba(255,200,0,0.5);
+        }
+
+        .admin-toggle.active { 
+            background: var(--danger); 
+            border-color: var(--danger);
+            color: #000000;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            width: 100%;
+            max-width: 480px;
+            flex-shrink: 0;
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+
+        .admin-panel.visible { display: block; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .admin-card {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,200,0,0.15);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            color: #fff;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .admin-card::-webkit-scrollbar { width: 6px; }
+        .admin-card::-webkit-scrollbar-track { background: transparent; }
+        .admin-card::-webkit-scrollbar-thumb { background: rgba(255,200,0,0.2); border-radius: 3px; }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,200,0,0.15);
+        }
+
+        .admin-title {
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffcc00;
+        }
+
+        .admin-section { margin-bottom: 25px; }
+
+        .section-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.7;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #ffaa00;
+        }
+
+        .form-group { margin-bottom: 15px; }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            opacity: 0.9;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,200,0,0.15);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input::placeholder { color: rgba(255,255,255,0.3); }
+
+        .form-input:focus {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,200,0,0.4);
+            box-shadow: 0 0 0 3px rgba(255,200,0,0.1);
+        }
+
+        textarea.form-input { resize: vertical; min-height: 60px; }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff9500, #ff6b35);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+        }
+
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4); 
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #34c759, #30d158);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3);
+        }
+
+        .btn-success:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(52, 199, 89, 0.4); 
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff3b30, #ff453a);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3);
+        }
+
+        .btn-danger:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(255, 59, 48, 0.4); 
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+
+        .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,200,0,0.1);
+        }
+
+        /* Link List in Admin */
+        .admin-link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .admin-link-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,200,0,0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-link-item:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,200,0,0.2);
+        }
+
+        .admin-link-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255,200,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            color: #ffcc00;
+        }
+
+        .admin-link-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .admin-link-title {
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-link-url {
+            font-size: 11px;
+            opacity: 0.5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-link-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.visible { display: flex; }
+
+        .modal {
+            background: linear-gradient(135deg, #1a1a1a, #252525);
+            border: 1px solid rgba(255,200,0,0.15);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+            color: #fff;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .modal-title { font-size: 20px; font-weight: 700; color: #ffcc00; }
+
+        .modal-close {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(255,255,255,0.08); border: none;
+            color: #fff; font-size: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover { background: rgba(255,255,255,0.15); transform: rotate(90deg); }
+
+        .icon-picker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .icon-option {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid transparent;
+            color: #ffcc00;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .icon-option:hover { background: rgba(255,200,0,0.1); }
+        .icon-option.selected { border-color: #ff9500; background: rgba(255, 149, 0, 0.15); }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.5;
+        }
+
+        .empty-state i { font-size: 32px; margin-bottom: 10px; display: block; color: #ffcc00; }
+
+        /* Login Modal Specific */
+        .login-modal .modal {
+            max-width: 360px;
+            text-align: center;
+        }
+
+        .login-modal .modal-title {
+            margin-bottom: 5px;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            opacity: 0.6;
+            margin-bottom: 25px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .login-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9500, #ff6b35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            box-shadow: 0 4px 20px rgba(255, 149, 0, 0.4);
+            color: #fff;
+        }
+
+        .login-error {
+            color: #ff3b30;
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .login-error i { font-size: 12px; }
+
+        .login-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .login-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            pointer-events: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,200,0,0.2);
+        }
+
+        .toast.show { 
+            opacity: 1; 
+            transform: translateX(-50%) translateY(0); 
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .app-wrapper { flex-direction: column; align-items: center; }
+            .admin-panel { max-width: 480px; }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card { padding: 30px 20px; }
+            .name { font-size: 24px; }
+            .avatar { width: 100px; height: 100px; }
+            .social-icon { width: 44px; height: 44px; }
+            .admin-card { padding: 20px; }
+            .modal { padding: 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+    </div>
+
+    <div class="app-wrapper">
+        <!-- Public View -->
+        <div class="public-container">
+            <div class="glass-card">
+                <div class="glass-shine"></div>
+
+                <div class="profile">
+                    <div class="avatar-wrapper">
+                        <div class="avatar-ring"></div>
+                        <img src="profilepic.jpg" alt="Profile" class="avatar" id="displayAvatar">
+                    </div>
+                    <h1 class="name" id="displayName">Aditya Soni</h1>
+                    <p class="bio" id="displayBio">Digital Creator & Designer ✨<br>Building beautiful things on the internet</p>
+                </div>
+
+                <div class="social-icons" id="displaySocials">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="links" id="displayLinks">
+                    <!-- Populated by JS -->
+                </div>
+
+                <button class="share-btn" onclick="shareProfile()">
+                    <i class="fas fa-share-alt"></i>
+                    Share Profile
+                </button>
+            </div>
+            <div class="footer">Made with <i class="fas fa-heart" style="color: #ff6b35;"></i> by Aditya Soni</div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="adminPanel">
+            <div class="admin-card">
+                <div class="admin-header">
+                    <div class="admin-title"><i class="fas fa-cog"></i> Admin Panel</div>
+                    <button class="btn btn-danger btn-sm" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="admin-section">
+                    <div class="section-label">Profile</div>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-input" id="editName" placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea class="form-input" id="editBio" placeholder="Short bio..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Avatar URL</label>
+                        <input type="text" class="form-input" id="editAvatar" placeholder="https://...">
+                    </div>
+                </div>
+
+                <!-- Socials Section -->
+                <div class="admin-section">
+                    <div class="section-label">Social Media</div>
+                    <div class="form-group">
+                        <label><i class="fab fa-instagram"></i> Instagram</label>
+                        <input type="text" class="form-input" id="editInstagram" placeholder="https://instagram.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-twitter"></i> Twitter / X</label>
+                        <input type="text" class="form-input" id="editTwitter" placeholder="https://twitter.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-github"></i> GitHub</label>
+                        <input type="text" class="form-input" id="editGithub" placeholder="https://github.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-linkedin"></i> LinkedIn</label>
+                        <input type="text" class="form-input" id="editLinkedin" placeholder="https://linkedin.com/in/...">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-youtube"></i> YouTube</label>
+                        <input type="text" class="form-input" id="editYoutube" placeholder="https://youtube.com/...">
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="admin-section">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                        <div class="section-label" style="margin:0;">Links</div>
+                        <button class="btn btn-primary btn-sm" onclick="openLinkModal()">
+                            <i class="fas fa-plus"></i> Add Link
+                        </button>
+                    </div>
+                    <div class="admin-link-list" id="adminLinkList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="admin-actions">
+                    <button class="btn btn-success" onclick="saveData()">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportData()">
+                        <i class="fas fa-download"></i> Export JSON
+                    </button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">
+                        <i class="fas fa-upload"></i> Import
+                    </button>
+                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+                    <button class="btn btn-danger" onclick="resetData()">
+                        <i class="fas fa-trash"></i> Reset All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Toggle -->
+    <button class="admin-toggle" id="adminToggle" onclick="openLoginModal()" title="Admin Login">
+        <i class="fas fa-lock"></i>
+    </button>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay login-modal" id="loginModal">
+        <div class="modal">
+            <div class="login-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="modal-title">Admin Login</div>
+            <div class="login-subtitle">Enter your credentials to access the admin panel</div>
+
+            <div class="form-group">
+                <label>Admin ID</label>
+                <input type="text" class="form-input" id="loginId" placeholder="Enter admin ID">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-input" id="loginPassword" placeholder="Enter password">
+            </div>
+
+            <div class="login-error" id="loginError"></div>
+
+            <div class="login-actions">
+                <button class="btn btn-secondary" onclick="closeLoginModal()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-primary" onclick="attemptLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </div>
+
+            <div style="margin-top:15px; font-size:12px; opacity:0.4; text-align:center;">
+                <!-- Default: admin / admin123 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Link Modal -->
+    <div class="modal-overlay" id="linkModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Add Link</div>
+                <button class="modal-close" onclick="closeLinkModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-input" id="linkTitle" placeholder="e.g. My Portfolio">
+            </div>
+            <div class="form-group">
+                <label>URL</label>
+                <input type="text" class="form-input" id="linkUrl" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" class="form-input" id="linkDesc" placeholder="Short description...">
+            </div>
+            <div class="form-group">
+                <label>Icon</label>
+                <div class="icon-picker" id="iconPicker"></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn btn-success" style="flex:1" onclick="saveLink()">
+                    <i class="fas fa-check"></i> Save Link
+                </button>
+                <button class="btn btn-secondary" onclick="closeLinkModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ===================== AUTH CONFIG =====================
+        const DEFAULT_ADMIN_ID = 'admin';
+        const DEFAULT_ADMIN_PASSWORD = 'Admin@2004#';
+
+        let isAdminLoggedIn = false;
+        let adminSession = null;
+
+        // ===================== DATA =====================
+        const defaultData = {
+            profile: {
+                name: "Your Name",
+                bio: "Digital Creator & Designer ✨\nBuilding beautiful things on the internet",
+                avatar: "profilepic.jpg"
+            },
+            socials: {
+                instagram: "",
+                twitter: "",
+                github: "",
+                linkedin: "",
+                youtube: ""
+            },
+            links: [
+                { id: 1, title: "Personal Website", url: "https://example.com", desc: "Check out my portfolio", icon: "fas fa-globe" },
+                { id: 2, title: "My Blog", url: "https://example.com/blog", desc: "Articles about design & tech", icon: "fas fa-blog" },
+                { id: 3, title: "Online Store", url: "https://example.com/store", desc: "Digital products & templates", icon: "fas fa-shopping-bag" },
+                { id: 4, title: "Newsletter", url: "https://example.com/newsletter", desc: "Weekly insights & tips", icon: "fas fa-envelope" },
+                { id: 5, title: "Book a Call", url: "https://calendly.com", desc: "Let's collaborate together", icon: "fas fa-calendar-alt" },
+                { id: 6, title: "Free Resources", url: "https://example.com/resources", desc: "Templates, guides & tools", icon: "fas fa-download" }
+            ]
+        };
+
+        const iconOptions = [
+            "fas fa-globe", "fas fa-blog", "fas fa-shopping-bag", "fas fa-envelope",
+            "fas fa-calendar-alt", "fas fa-download", "fas fa-link", "fas fa-star",
+            "fas fa-heart", "fas fa-music", "fas fa-video", "fas fa-camera",
+            "fas fa-book", "fas fa-code", "fas fa-briefcase", "fas fa-graduation-cap",
+            "fas fa-coffee", "fas fa-gamepad", "fas fa-paint-brush", "fas fa-rocket",
+            "fas fa-shopping-cart", "fas fa-trophy", "fas fa-user", "fas fa-users"
+        ];
+
+        let appData = JSON.parse(JSON.stringify(defaultData));
+        let editingLinkId = null;
+        let selectedIcon = "fas fa-link";
+
+        // ===================== AUTH FUNCTIONS =====================
+        function getStoredCredentials() {
+            try {
+                const stored = localStorage.getItem('linktree_auth');
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+            } catch (e) {}
+            return { id: DEFAULT_ADMIN_ID, password: DEFAULT_ADMIN_PASSWORD };
+        }
+
+        function storeCredentials(id, password) {
+            localStorage.setItem('linktree_auth', JSON.stringify({ id, password }));
+        }
+
+        function openLoginModal() {
+            if (isAdminLoggedIn) {
+                toggleAdmin();
+                return;
+            }
+            document.getElementById('loginModal').classList.add('visible');
+            document.getElementById('loginId').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('loginId').focus();
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('visible');
+            document.getElementById('loginError').textContent = '';
+        }
+
+        function attemptLogin() {
+            const inputId = document.getElementById('loginId').value.trim();
+            const inputPassword = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (!inputId || !inputPassword) {
+                errorEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all fields';
+                return;
+            }
+
+            const creds = getStoredCredentials();
+
+            if (inputId === creds.id && inputPassword === creds.password) {
+                isAdminLoggedIn = true;
+                adminSession = Date.now();
+                closeLoginModal();
+                toggleAdmin();
+                showToast('Welcome, Admin!');
+                updateAdminToggle();
+            } else {
+                errorEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid credentials';
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('loginPassword').focus();
+            }
+        }
+
+        function logout() {
+            isAdminLoggedIn = false;
+            adminSession = null;
+            toggleAdmin();
+            showToast('Logged out successfully');
+            updateAdminToggle();
+        }
+
+        function updateAdminToggle() {
+            const btn = document.getElementById('adminToggle');
+            if (isAdminLoggedIn) {
+                btn.innerHTML = '<i class="fas fa-times"></i>';
+                btn.classList.add('active');
+                btn.title = 'Close Admin Panel';
+            } else {
+                btn.innerHTML = '<i class="fas fa-lock"></i>';
+                btn.classList.remove('active');
+                btn.title = 'Admin Login';
+            }
+        }
+
+        // Allow Enter key in login
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (document.getElementById('loginModal').classList.contains('visible')) {
+                    attemptLogin();
+                }
+            }
+        });
+
+        // ===================== INIT =====================
+        function init() {
+            loadFromStorage();
+            renderPublic();
+            renderAdmin();
+            createParticles();
+            setupIconPicker();
+            updateAdminToggle();
+        }
+
+        function loadFromStorage() {
+            try {
+                const stored = localStorage.getItem('linktree_data');
+                if (stored) {
+                    appData = JSON.parse(stored);
+                }
+            } catch (e) {
+                console.error('Storage error', e);
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('linktree_data', JSON.stringify(appData));
+        }
+
+        // ===================== RENDER PUBLIC =====================
+        function renderPublic() {
+            document.getElementById('displayName').textContent = appData.profile.name;
+            document.getElementById('displayBio').innerHTML = appData.profile.bio.replace(/\n/g, '<br>');
+            document.getElementById('displayAvatar').src = appData.profile.avatar;
+
+            // Socials
+            const socialContainer = document.getElementById('displaySocials');
+            socialContainer.innerHTML = '';
+            const socialMap = {
+                instagram: { icon: 'fab fa-instagram', label: 'Instagram' },
+                twitter: { icon: 'fab fa-twitter', label: 'Twitter' },
+                github: { icon: 'fab fa-github', label: 'GitHub' },
+                linkedin: { icon: 'fab fa-linkedin-in', label: 'LinkedIn' },
+                youtube: { icon: 'fab fa-youtube', label: 'YouTube' }
+            };
+
+            Object.entries(appData.socials).forEach(([key, url]) => {
+                if (!url) return;
+                const s = socialMap[key];
+                const a = document.createElement('a');
+                a.className = 'social-icon';
+                a.href = url;
+                a.target = '_blank';
+                a.title = s.label;
+                a.innerHTML = `<i class="${s.icon}"></i>`;
+                socialContainer.appendChild(a);
+            });
+
+            // Links - with shimmer div inside each link
+            const linksContainer = document.getElementById('displayLinks');
+            linksContainer.innerHTML = '';
+            appData.links.forEach(link => {
+                const a = document.createElement('a');
+                a.className = 'link-item';
+                a.href = link.url;
+                a.target = '_blank';
+                a.innerHTML = `
+                    <div class="link-shimmer"></div>
+                    <div class="link-icon"><i class="${link.icon}"></i></div>
+                    <div class="link-text">
+                        <div class="link-title">${escapeHtml(link.title)}</div>
+                        <div class="link-desc">${escapeHtml(link.desc)}</div>
+                    </div>
+                    <div class="link-arrow"><i class="fas fa-arrow-right"></i></div>
+                `;
+                linksContainer.appendChild(a);
+            });
+        }
+
+        // ===================== RENDER ADMIN =====================
+        function renderAdmin() {
+            document.getElementById('editName').value = appData.profile.name;
+            document.getElementById('editBio').value = appData.profile.bio;
+            document.getElementById('editAvatar').value = appData.profile.avatar;
+            document.getElementById('editInstagram').value = appData.socials.instagram;
+            document.getElementById('editTwitter').value = appData.socials.twitter;
+            document.getElementById('editGithub').value = appData.socials.github;
+            document.getElementById('editLinkedin').value = appData.socials.linkedin;
+            document.getElementById('editYoutube').value = appData.socials.youtube;
+
+            const list = document.getElementById('adminLinkList');
+            list.innerHTML = '';
+
+            if (appData.links.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-link"></i>
+                        <div>No links yet. Click "Add Link" to get started.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            appData.links.forEach(link => {
+                const div = document.createElement('div');
+                div.className = 'admin-link-item';
+                div.innerHTML = `
+                    <div class="admin-link-icon"><i class="${link.icon}"></i></div>
+                    <div class="admin-link-info">
+                        <div class="admin-link-title">${escapeHtml(link.title)}</div>
+                        <div class="admin-link-url">${escapeHtml(link.url)}</div>
+                    </div>
+                    <div class="admin-link-actions">
+                        <button class="btn btn-primary btn-sm" onclick="editLink(${link.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteLink(${link.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // ===================== ADMIN ACTIONS =====================
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            const isVisible = panel.classList.contains('visible');
+
+            if (isVisible) {
+                panel.classList.remove('visible');
+            } else {
+                panel.classList.add('visible');
+                renderAdmin();
+            }
+            updateAdminToggle();
+        }
+
+        function saveData() {
+            appData.profile.name = document.getElementById('editName').value || 'Your Name';
+            appData.profile.bio = document.getElementById('editBio').value || '';
+            appData.profile.avatar = document.getElementById('editAvatar').value || defaultData.profile.avatar;
+
+            appData.socials.instagram = document.getElementById('editInstagram').value;
+            appData.socials.twitter = document.getElementById('editTwitter').value;
+            appData.socials.github = document.getElementById('editGithub').value;
+            appData.socials.linkedin = document.getElementById('editLinkedin').value;
+            appData.socials.youtube = document.getElementById('editYoutube').value;
+
+            saveToStorage();
+            renderPublic();
+            showToast('Changes saved successfully!');
+        }
+
+        function resetData() {
+            if (!confirm('Are you sure? This will reset ALL data to defaults.')) return;
+            appData = JSON.parse(JSON.stringify(defaultData));
+            saveToStorage();
+            renderPublic();
+            renderAdmin();
+            showToast('Data reset to defaults');
+        }
+
+        function exportData() {
+            const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'linktree-backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Data exported!');
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.profile && data.links) {
+                        appData = data;
+                        saveToStorage();
+                        renderPublic();
+                        renderAdmin();
+                        showToast('Data imported successfully!');
+                    } else {
+                        throw new Error('Invalid format');
+                    }
+                } catch (err) {
+                    showToast('Invalid JSON file');
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
+
+        // ===================== LINK CRUD =====================
+        function openLinkModal() {
+            editingLinkId = null;
+            selectedIcon = 'fas fa-link';
+            document.getElementById('modalTitle').textContent = 'Add Link';
+            document.getElementById('linkTitle').value = '';
+            document.getElementById('linkUrl').value = '';
+            document.getElementById('linkDesc').value = '';
+            updateIconPicker();
+            document.getElementById('linkModal').classList.add('visible');
+        }
+
+        function closeLinkModal() {
+            document.getElementById('linkModal').classList.remove('visible');
+        }
+
+        function editLink(id) {
+            const link = appData.links.find(l => l.id === id);
+            if (!link) return;
+            editingLinkId = id;
+            selectedIcon = link.icon;
+            document.getElementById('modalTitle').textContent = 'Edit Link';
+            document.getElementById('linkTitle').value = link.title;
+            document.getElementById('linkUrl').value = link.url;
+            document.getElementById('linkDesc').value = link.desc;
+            updateIconPicker();
+            document.getElementById('linkModal').classList.add('visible');
+        }
+
+        function deleteLink(id) {
+            if (!confirm('Delete this link?')) return;
+            appData.links = appData.links.filter(l => l.id !== id);
+            saveToStorage();
+            renderPublic();
+            renderAdmin();
+            showToast('Link deleted');
+        }
+
+        function saveLink() {
+            const title = document.getElementById('linkTitle').value.trim();
+            const url = document.getElementById('linkUrl').value.trim();
+            const desc = document.getElementById('linkDesc').value.trim();
+
+            if (!title || !url) {
+                showToast('Title and URL are required');
+                return;
+            }
+
+            if (editingLinkId) {
+                const link = appData.links.find(l => l.id === editingLinkId);
+                if (link) {
+                    link.title = title;
+                    link.url = url;
+                    link.desc = desc;
+                    link.icon = selectedIcon;
+                }
+            } else {
+                const newId = appData.links.length > 0 ? Math.max(...appData.links.map(l => l.id)) + 1 : 1;
+                appData.links.push({ id: newId, title, url, desc, icon: selectedIcon });
+            }
+
+            saveToStorage();
+            renderPublic();
+            renderAdmin();
+            closeLinkModal();
+            showToast(editingLinkId ? 'Link updated!' : 'Link added!');
+        }
+
+        // ===================== ICON PICKER =====================
+        function setupIconPicker() {
+            const container = document.getElementById('iconPicker');
+            container.innerHTML = '';
+            iconOptions.forEach(icon => {
+                const btn = document.createElement('button');
+                btn.className = 'icon-option';
+                btn.type = 'button';
+                btn.innerHTML = `<i class="${icon}"></i>`;
+                btn.onclick = () => {
+                    selectedIcon = icon;
+                    updateIconPicker();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function updateIconPicker() {
+            document.querySelectorAll('.icon-option').forEach(btn => {
+                const iconClass = btn.querySelector('i').className;
+                btn.classList.toggle('selected', iconClass === selectedIcon);
+            });
+        }
+
+        // ===================== UTILS =====================
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        async function shareProfile() {
+            try {
+                if (navigator.share) {
+                    await navigator.share({ title: appData.profile.name, text: appData.profile.bio, url: window.location.href });
+                } else {
+                    await navigator.clipboard.writeText(window.location.href);
+                    showToast('Link copied to clipboard!');
+                }
+            } catch (err) {}
+        }
+
+        // ===================== PARTICLES =====================
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                p.style.animationDelay = (Math.random() * 10) + 's';
+                p.style.setProperty('--tx', (Math.random() * 100 - 50) + 'px');
+                p.style.width = (Math.random() * 4 + 2) + 'px';
+                p.style.height = p.style.width;
+                container.appendChild(p);
+            }
+        }
+
+        // ===================== START =====================
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
